@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Trip Planner</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plan your trip smartly with Trip Planner! 
+    Use ChatGPT AI to create personalized itineraries, discover destinations, and optimize your travel time.">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" rel="stylesheet">
+
+    <link href="./includes/styles/style.css" rel="stylesheet">
+    <script src="./includes/js/geolocation.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-form">
+            <form action="/trips" method="GET" onsubmit="disableButton()">
+                <div class="form-icon">
+                    <span><i class="icon icon-plane"></i></span>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control item" id="cidade" placeholder="Cidade" name="cidade">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="dias" name="dias" class="form-control item" placeholder="Dias" required>
+                </div>
+                <div class="form-group">
+                    <select id="categorias" class="form-control item" name="categorias">
+                        <option value="museus">Museus</option>
+                        <option value="praias">Praias</option>
+                        <option value="aventura">Aventura</option>
+                        <option value="gastronomia">Gastronomia</option>
+                        <option value="esportes">Esportes</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="teatro">Teatro</option>
+                        <option value="festas">Festas</option>
+                        <option value="natureza">Natureza</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button id="submit-btn" type="submit" class="btn btn-block create-account">Criar viagem</button>
+                </div>
+            </form>
+            <div class="social-media">
+                <div class="social-icons">
+                    <a href="https://www.linkedin.com/in/luiz-eduardo-costa/" target="_blank">
+                        <i class="icon-social-linkedin" title="LinkedIn"></i>
+                    </a>
+                </div>
+            </div>
+        </div>       
+    </div>
+    <script>
+        function disableButton() {
+            let button = document.getElementById("submit-btn");
+            button.disabled = true;
+            button.textContent = "Criando viagem...";
+        }
+    </script>
+</body>
+</html>
