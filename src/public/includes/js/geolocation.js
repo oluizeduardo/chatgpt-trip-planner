@@ -6,7 +6,7 @@ if (navigator.geolocation) {
         fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('cidade').value = data.address.city || data.address.town || data.address.village;
+                document.getElementById('destino').value = data.address.city || data.address.town || data.address.village;
             })
             .catch(error => console.error('Error fetching city name:', error));
     });
