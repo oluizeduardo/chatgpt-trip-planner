@@ -7,15 +7,15 @@ const client = new OpenAI({
   apiKey: openaiApiKey,
 });
 
-async function createTrip(cidade, categorias, dias) {
+async function createTrip(destino, categorias, dias) {
   const prompt = `
-        Gere um roteiro turístico para ${dias} dia(s) em ${cidade}.
-        Considere as seguintes categorias de interesse: ${categorias}.
-        Liste os pontos turísticos e descreva cada um brevemente.
-        Se houver algum custo, informe o preço estimado da entrada/ingresso.
-        Como resultado, traga somente o roteiro separado por dias, 
-        não escreva nada antes e nada depois.
-        Na sua resposta, use um linguajar jovem e não use emojis.
+        Atue como um planejador de viagens e gere um roteiro turístico para ${dias} dia(s) em ${destino}, 
+        baseado nas seguintes categorias de interesse: ${categorias}. 
+        Liste os pontos turísticos para cada dia, organizando-os de forma lógica e 
+        descrevendo brevemente cada um. 
+        Se houver custos de entrada, inclua a estimativa do valor. 
+        A resposta deve conter somente o roteiro separado por dias, sem introdução ou conclusão. 
+        Use um tom jovem e descontraído, mas evite emojis.
     `;
 
   try {
