@@ -1,27 +1,20 @@
-name: Deploy to Render
 on:
+  pull_request:
   push:
     branches: [main]
 
 jobs:
-  build-node:
-    name: Build and run Node project
+  ci:
     runs-on: ubuntu-latest
-    container: node:16
     steps:
       - uses: actions/checkout@v3
-        name: Check out code from Github
+      - name: Install NPM packages
+        run: |
+          npm install
 
-      - run: npm install
-        name: Install NPM packages
-
-  deploy:
-    name: Deploy to Render
-    needs: [build-node]
-    runs-on: ubuntu-latest
-    steps:
       - name: Deploy to production
-        uses: johnbeynon/render-deploy-action@v0.0.8
-        with:
-          service-id: ${{ secrets.RENDER_SERVICE_ID }}
-          api-key: ${{ secrets.RENDER_API_KEY }}
+        if: github.ref == 'refs/heads/main'
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl "$deploy_url"
