@@ -5,16 +5,18 @@ let trip = '';
 class IteneraryController {
   static createNewTrip = async (req, res) => {
     try {
-      const { cidade, dias, categorias } = req.query;
+      const { destino, dias, categorias } = req.query;
 
-      trip = await createTrip(cidade, categorias, dias);
+      trip = await createTrip(destino, categorias, dias);
 
       res.send(`
         <html>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Viagem para ${cidade}</title>
-          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+          <title>Viagem para ${destino}</title>
+          <!-- Bootstrap -->
+          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
           <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
           <style>
             body {
@@ -26,7 +28,7 @@ class IteneraryController {
           </style>
           <body>        
             <div class="container">
-              <h3 class="mt-3">Aqui está seu roteiro de ${dias} dias em ${cidade}. Aproveite!</h3>
+              <h3 class="mt-3">Aqui está seu roteiro de ${dias} dias em ${destino}. Aproveite!</h3>
               <br><br>
               <div id="outputText"></div>
 

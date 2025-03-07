@@ -37,14 +37,12 @@ body{
     padding: 5px 20px;
 }
 
-.registration-form .create-account{
-    border-radius: 30px;
+.registration-form .create-trip{
     padding: 10px 20px;
     font-size: 18px;
     font-weight: bold;
     background-color: #5791ff;
     border: none;
-    color: white;
     margin-top: 20px;
 }
 
@@ -70,10 +68,10 @@ body{
     text-align: center;
     background-color: #fff;
     line-height: 45px;
+    text-decoration: none;
 }
 
-.registration-form .social-icons a:hover{
-    text-decoration: none;
+.registration-form .social-icons a:hover{    
     opacity: 0.6;
 }
 
