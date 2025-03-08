@@ -1,17 +1,6 @@
 require('dotenv').config();
-const express = require('express');
-const path = require('path');
-const logger = require('./src/api/logger/logger');
-
-const tripsRoutes = require('./src/api/routes/tripsRoute');
-
-const app = express();
-
-// Middleware to process form data
-app.use(express.urlencoded({ extended: true }));
-app.use('/', express.static(path.join(__dirname, '/src/public')));
-
-app.use('/trips', tripsRoutes);
+const logger = require('./src/backend/logger/logger');
+const app = require('./src/backend/api/api');
 
 const port = process.env.PORT || 3000;
 
