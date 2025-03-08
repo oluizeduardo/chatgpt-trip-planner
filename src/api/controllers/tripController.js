@@ -1,4 +1,5 @@
 const { createTrip } = require('../chatgptService');
+const logger = require('../logger/logger');
 
 let trip = '';
 
@@ -6,6 +7,10 @@ class IteneraryController {
   static createNewTrip = async (req, res) => {
     try {
       const { destino, dias, categorias } = req.query;
+
+      logger.info(
+        `Creating trip: [Destination: ${destino}, days: ${dias}, categories: ${categorias}].`
+      );
 
       trip = await createTrip(destino, categorias, dias);
 
@@ -45,7 +50,7 @@ class IteneraryController {
         </html>
       `);
     } catch (error) {
-      console.error('Error TripController.createNewTrip', error);
+      logger.error(`Error TripController.createNewTrip - Details: ${error}`);
       res.status(500).json({ message: 'Internal server error.' });
     }
   };

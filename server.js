@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const logger = require('./src/api/logger/logger');
 
 const tripsRoutes = require('./src/api/routes/tripsRoute');
 
@@ -14,4 +15,4 @@ app.use('/trips', tripsRoutes);
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => console.log(`Server running on ${port}.`));
+app.listen(port, () => logger.info(`Server running on ${port}.`));

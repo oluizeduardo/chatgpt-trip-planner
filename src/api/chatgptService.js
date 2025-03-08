@@ -1,16 +1,28 @@
 require('dotenv').config();
 const OpenAI = require('openai');
+const logger = require('./logger/logger');
 
 const openaiApiKey = process.env.OPENAI_API_KEY;
+
+if (!openaiApiKey) {
+  logger.error('Error: OPENAI_API_KEY not found. Check your .env file.');
+  process.exit(1); // Finish with error
+}
 
 const client = new OpenAI({
   apiKey: openaiApiKey,
 });
 
-async function createTrip(destino, categorias, dias) {
+async function createTrip(destination, category, days) {
+  if (!destination || !category || !days) {
+    throw new Error(
+      'Invalid parameters: destination, category and days are required.'
+    );
+  }
+
   const prompt = `
-        Atue como um planejador de viagens e gere um roteiro turístico para ${dias} dia(s) em ${destino}, 
-        baseado nas seguintes categorias de interesse: ${categorias}. 
+        Atue como um planejador de viagens e gere um roteiro turístico para ${days} dia(s) em ${destination}, 
+        baseado nas seguintes categorias de interesse: ${category}. 
         Liste os pontos turísticos para cada dia, organizando-os de forma lógica e 
         descrevendo brevemente cada um. 
         Se houver custos de entrada, inclua a estimativa do valor. 
@@ -19,15 +31,18 @@ async function createTrip(destino, categorias, dias) {
     `;
 
   try {
-    const chatCompletion = await client.chat.completions.create({
+    const response = await client.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
       model: 'gpt-4o-mini',
     });
 
-    return chatCompletion.choices[0].message.content;
+    return response.choices[0]?.message?.content || 'No response generated.';
   } catch (error) {
-    console.error('Erro na API do ChatGPT:', error);
-    return 'Erro ao gerar o roteiro.';
+    logger.error(
+      'Error calling OpenAI API: ',
+      error.response?.data || error.message
+    );
+    return 'Error creating travel plan. Please try again later.';
   }
 }
 
