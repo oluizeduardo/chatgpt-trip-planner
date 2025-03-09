@@ -1,8 +1,8 @@
 {
-  "name": "smarttrip",
+  "name": "chatgpt-trip-planner",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A travel planning assistant powered by ChatGPT, helping users create personalized itineraries and trip recommendations.",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,8 +10,22 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write ."
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "chatgpt",
+    "trip planner",
+    "travel",
+    "itinerary",
+    "AI"
+  ],
+  "author": "Luiz Eduardo da Costa <costaeduardoluiz@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oluizeduardo/chatgpt-trip-planner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oluizeduardo/chatgpt-trip-planner/issues"
+  },
+  "homepage": "https://trip-planner-zvg4.onrender.com",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.8.1",
