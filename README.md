@@ -14,3 +14,7 @@ Node.js trip planner application using OpenAI API.
   - `npm install`
 - Run the server.
   - `npm start`
+
+## 🔗 Code analysis
+
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-dark.svg)](https://sonarcloud.io/summary/new_code?id=oluizeduardo_chatgpt-trip-planner)
