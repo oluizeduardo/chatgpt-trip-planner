@@ -23,8 +23,8 @@ async function createTrip(destination, category, days) {
   const prompt = `
         Atue como um planejador de viagens e gere um roteiro turístico para ${days} dia(s) em ${destination}, 
         baseado nas seguintes categorias de interesse: ${category}. 
-        Liste os pontos turísticos para cada dia, organizando-os de forma lógica e 
-        descrevendo brevemente cada um. 
+        Liste os pontos turísticos para cada dia, organizando-os de forma lógica: manhã, tarde e noite, 
+        descreva cada um brevemente.
         Se houver custos de entrada, inclua a estimativa do valor. 
         A resposta deve conter somente o roteiro separado por dias, sem introdução ou conclusão. 
         Use um tom jovem e descontraído, mas evite emojis.

@@ -13,7 +13,7 @@ class ItineraryController {
       }
 
       logger.info(
-        `Creating trip: [Destination: ${destino}, days: ${dias}, categories: ${categorias}].`
+        `Creating trip: [Destination: ${destino}, days: ${dias}, category: ${categorias}].`
       );
 
       const trip = await createTrip(destino, categorias, dias);
@@ -21,7 +21,7 @@ class ItineraryController {
       res.send(generateHTML(destino, dias, categorias, trip));
     } catch (error) {
       logger.error(
-        `Error ItineraryController.createNewTrip - Details: ${error.message}`
+        `Error TripController.createNewTrip - Details: ${error.message}`
       );
       res.status(500).json({ message: 'Internal server error.' });
     }
@@ -49,7 +49,7 @@ const generateHTML = (destino, dias, categorias, trip) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Viagem para ${safeDestino}</title>
+        <title>Viagem para ${safeDestino} | Trip Planner</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
