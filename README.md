@@ -1,6 +1,22 @@
-# Trip Planner application with ChatGPT
+<div align="center">
+  <img src="./src/public/includes/imgs/tab-icon.png" width="100" height="100">  
+</div>
+
+# Trip Planner with ChatGPT API
 
 Node.js trip planner application using OpenAI API.
+
+## 🛠 Technologies applied
+
+- Frontend
+  - [Bootstrap](https://getbootstrap.com/)
+- Backend
+  - NodeJS
+  - [Express](https://expressjs.com/)
+- CICD
+  - [GitHub Actions](https://docs.github.com/en/actions)
+- Deploy
+  - [Render](https://render.com/)
 
 ## 🚀 How to run locally
 
