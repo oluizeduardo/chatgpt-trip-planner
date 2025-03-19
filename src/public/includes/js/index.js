@@ -1,9 +1,26 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 function disableButton() {
-    let button = document.getElementById("submit-btn");
+    const button = document.getElementById("submit-btn");
+    if (!button) {
+        console.error("Submit button not found!");
+        return;
+    }
     button.disabled = true;
-    button.innerHTML = 'Criando viagem... <span class="spinner-border spinner-border-sm"></span>';
+    startLoadingAnimation(button);
+}
+
+function startLoadingAnimation(button) {
+    if (!button) return;
+    const messages = ["Criando viagem", "Carregando", "Quase lá"];
+    let index = 0;
+
+    button.innerHTML = `${messages[index]}... <span class="spinner-border spinner-border-sm"></span>`;
+    
+    messageInterval = setInterval(() => {
+        index = (index + 1) % messages.length;
+        button.innerHTML = `${messages[index]}... <span class="spinner-border spinner-border-sm"></span>`;
+    }, 3000);
 }
 
 function initAutocomplete() {
