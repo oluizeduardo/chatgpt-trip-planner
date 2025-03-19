@@ -1,0 +1,26 @@
+name: 'Bug Report'
+description: 'Report a reproducible bug or unexpected behavior.'
+title: '[BUG] '
+labels: ['bug']
+assignees:
+  - oluizeduardo
+body:
+  - type: markdown
+    attributes:
+      value: "## 📝 Bug Report Template\nFill in the details below to help us understand the issue."
+
+  - type: input
+    id: environment
+    attributes:
+      label: 'Environment'
+      description: 'Provide relevant details (e.g., OS, browser, app version).'
+      placeholder: 'e.g., Windows 11, Chrome 119, v2.3.1'
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 'Describe the Issue'
+      description: 'What happened? What did you expect?'
+      placeholder: 'A clear and concise description of the problem.'
+    validations:
+      required: true
