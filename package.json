@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-trip-planner",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A travel planning assistant powered by ChatGPT, helping users create personalized itineraries and trip recommendations.",
   "main": "server.js",
   "scripts": {

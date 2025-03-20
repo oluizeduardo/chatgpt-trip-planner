@@ -36,7 +36,10 @@ async function createTrip(destination, category, days) {
       model: 'gpt-4o-mini',
     });
 
-    return response.choices[0]?.message?.content || 'No response generated.';
+    const trip =
+      response.choices[0]?.message?.content || 'No response generated.';
+
+    return JSON.stringify(trip);
   } catch (error) {
     logger.error(
       'Error calling OpenAI API: ',
