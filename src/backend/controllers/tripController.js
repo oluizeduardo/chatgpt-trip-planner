@@ -47,14 +47,19 @@ const generateHTML = (destination, days, categories, trip) => {
   const safeDestination = escapeHTML(destination);
   const safeDays = escapeHTML(days);
   const safeCategories = escapeHTML(categories);
+  const safeTrip = formatTripString(trip);
 
   template = template
     .replace(/#\{destination\}/g, safeDestination)
     .replace(/#\{days\}/g, safeDays)
     .replace(/#\{categories\}/g, safeCategories)
-    .replace(/#\{trip\}/g, trip);
+    .replace(/#\{trip\}/g, safeTrip);
 
   return template;
+};
+
+const formatTripString = (trip) => {
+  return trip.replace(/^"|"$/g, '');
 };
 
 const loadTemplateFile = (filePath) => {
