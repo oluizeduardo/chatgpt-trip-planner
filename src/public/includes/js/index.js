@@ -12,7 +12,7 @@ function disableButton() {
 
 function startLoadingAnimation(button) {
     if (!button) return;
-    const messages = ["Criando viagem", "Carregando", "Quase lá"];
+    const messages = ["Creating trip", "Loading", "Almost there"];
     let index = 0;
 
     button.innerHTML = `${messages[index]}... <span class="spinner-border spinner-border-sm"></span>`;
@@ -24,7 +24,7 @@ function startLoadingAnimation(button) {
 }
 
 function initAutocomplete() {
-    const input = document.getElementById("destino");
+    const input = document.getElementById("destination");
     const autocomplete = new google.maps.places.Autocomplete(input, {
         types: ["(cities)"], // Only cities.
     });

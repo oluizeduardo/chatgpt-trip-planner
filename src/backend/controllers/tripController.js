@@ -1,86 +1,85 @@
-const { createTrip } = require('../chatgptService');
+const { createTrip } = require('../service/chatgptService');
 const logger = require('../logger/logger');
-const fs = require('fs');
-const path = require('path');
 
 class TripController {
   static createNewTrip = async (req, res) => {
     try {
-      const { destino, dias, categorias } = req.query;
+      const { destination, days, categories } = req.query;
 
-      if (!destino || !dias || !categorias) {
+      if (!destination || !days || !categories) {
         return res.status(400).json({
-          message: 'Parâmetros destino, dias e categorias são obrigatórios.',
+          message: 'Parameters destination, days and categories are required.',
         });
       }
 
       logger.info(
-        `Creating trip: [Destination: ${destino}, days: ${dias}, category: ${categorias}].`
+        `Creating trip: [Destination: ${destination}, days: ${days}, categories: ${categories}].`
       );
 
-      const trip = await createTrip(destino, categorias, dias);
+      const trip = await createTrip(destination, days, categories);
 
-      res.send(generateHTML(destino, dias, categorias, trip));
+      res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <title>Trip to ${trip.destination} | Trip Planner</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="description" content="Plan your trip smartly with Trip Planner. Use ChatGPT AI to create personalized itineraries, discover destinations, and optimize your travel time.">              
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">            
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4BmMqqMAsw_dnX5bMgcZ2epfpOJtwH0Q&libraries=places"></script>
+        </head>
+        <body>
+            <div id="map" style="width: 100vw; height: 100vh; background-color: blanchedalmond;"></div>
+            <script>
+                async function initMap() {
+                  const position = { lat: ${trip.geolocation.lat}, lng: ${trip.geolocation.lng} };
+                  const options = {
+                      zoom: 13,
+                      center: position,
+                      mapId: "DEMO_MAP_ID",
+                  };            
+
+                  const map = new google.maps.Map(document.getElementById('map'), options);
+
+                  google.maps.event.addListener(map, 'click', 
+                  function(event){
+                    addMarker({coord: event.latLng});
+                  });
+
+                  addMarker({
+                    coord:{ lat: ${trip.geolocation.lat}, lng: ${trip.geolocation.lng} }, 
+                    content:'<h6>${trip.destination}</h6>'
+                  });           
+
+                  function addMarker(props){
+                    const marker = new google.maps.Marker({
+                      map: map,
+                      position: props.coord,
+                      animation: google.maps.Animation.DROP,
+                    });
+
+                    if(props.content){
+                      const infoWindow = new google.maps.InfoWindow({
+                        content: props.content
+                      });
+
+                      marker.addListener('click', function(){
+                        infoWindow.open(map, marker);
+                      });
+                    }
+                  } 
+                }
+                initMap();
+            </script>
+        </body>
+        </html>  
+      `);
     } catch (error) {
       logger.error(`TripController.createNewTrip - ${error}.`);
       res.status(500).json({ message: 'Internal server error.' });
     }
   };
 }
-
-// Utility function to prevent XSS when displaying data on the page
-const escapeHTML = (str) =>
-  String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-
-const generateHTML = (destination, days, categories, trip) => {
-  let template = loadTemplateFile('../templates/responseText.html');
-
-  if (!template) {
-    throw new Error('Template file not found');
-  }
-
-  const safeDestination = escapeHTML(destination);
-  const safeDays = escapeHTML(days);
-  const safeCategories = escapeHTML(categories);
-  const safeTrip = formatTripString(trip);
-
-  template = template
-    .replace(/#\{destination\}/g, safeDestination)
-    .replace(/#\{days\}/g, safeDays)
-    .replace(/#\{categories\}/g, safeCategories)
-    .replace(/#\{trip\}/g, safeTrip);
-
-  return template;
-};
-
-const formatTripString = (trip) => {
-  return trip.replace(/^"|"$/g, '');
-};
-
-const loadTemplateFile = (filePath) => {
-  if (!filePath) {
-    logger.error('No file path provided.');
-    return '';
-  }
-
-  try {
-    const fullFilePath = path.join(__dirname, filePath);
-
-    if (!fs.existsSync(fullFilePath)) {
-      logger.error(`File not found: ${fullFilePath}.`);
-      return '';
-    }
-
-    return fs.readFileSync(fullFilePath, 'utf8');
-  } catch (error) {
-    logger.error(`Error reading file ${filePath} - ${error.message}.`);
-    return '';
-  }
-};
 
 module.exports = TripController;
