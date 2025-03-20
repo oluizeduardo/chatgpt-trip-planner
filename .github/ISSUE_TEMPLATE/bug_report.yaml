@@ -5,10 +5,6 @@ labels: ['bug']
 assignees:
   - oluizeduardo
 body:
-  - type: markdown
-    attributes:
-      value: "## 📝 Bug Report Template\nFill in the details below to help us understand the issue."
-
   - type: input
     id: environment
     attributes:

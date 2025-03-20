@@ -1,47 +1,32 @@
-name: '✨ Feature Request'
+name: 'Feature Request'
 description: 'Suggest a new feature or enhancement.'
 title: '[Feature] '
 labels: ['enhancement']
 assignees:
   - oluizeduardo
 body:
-  - type: markdown
-    attributes:
-      value: "## 🚀 Feature Request\nDescribe the feature you would like to see."
-
-  - type: input
-    id: summary
-    attributes:
-      label: 'Brief Summary'
-      description: 'Provide a short summary of the feature request.'
-      placeholder: 'Example: Add dark mode support'
-
   - type: textarea
     id: description
     attributes:
       label: 'Feature Description'
       description: 'Explain in detail what the feature does and why it is useful.'
-      placeholder: 'Describe the problem this feature solves...'
     validations:
       required: true
 
   - type: textarea
-    id: benefits
+    id: task-breakdown
     attributes:
-      label: 'Benefits'
-      description: 'How will this feature improve the system or user experience?'
-      placeholder: 'Example: Improves accessibility, enhances UX...'
+      label: 'Task Breakdown'
+      description: 'List the steps or sub-tasks needed to implement this feature.'
 
   - type: textarea
-    id: alternatives
+    id: acceptance-criteria
     attributes:
-      label: 'Alternatives Considered'
-      description: 'Did you consider other solutions? Why did you choose this one?'
-      placeholder: 'Example: A different UI approach was tested...'
+      label: 'Acceptance Criteria'
+      description: 'Define the conditions that must be met for this feature to be considered complete.'
 
   - type: textarea
     id: additional_context
     attributes:
       label: 'Additional Context'
-      description: 'Add any other relevant details, screenshots, or references.'
-      placeholder: 'Links to relevant documentation, related issues, etc.'
+      description: 'Any extra information, considerations, or links that might help in implementing this feature.'
