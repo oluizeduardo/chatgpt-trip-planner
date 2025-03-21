@@ -19,8 +19,7 @@ class TripController {
       const trip = await createTrip(destination, days, categories);
 
       if (!trip) {
-        logger.error(`Error creating trip to ${destination}.`);
-        throw new Error('Error creating trip');
+        throw new Error('Received empty trip');
       }
 
       return res.send(generateHTML(trip));

@@ -1,7 +1,7 @@
 const createPrompt = (destination, days, categories) => `
   Act as a travel planner and generate a ${days}-day itinerary for ${destination} 
   based on the following interests: ${categories}.
-  The response must be strictly structured as JSON, without explanations or additional text.
+  The response must be a valid JSON object, **without markdown formatting, code blocks, or additional explanations**.
   Each day of the itinerary should include:
     - A numerical identifier for the day.
     - A list of tourist attractions, where each attraction includes:
@@ -11,7 +11,7 @@ const createPrompt = (destination, days, categories) => `
       - Opening hours.
       - Estimated visit duration.
       - Geolocation (latitude, longitude).
-  The JSON should follow this output format:
+  Respond with JSON only, formatted as follows:
 
   {
     "destination": "City Name",
