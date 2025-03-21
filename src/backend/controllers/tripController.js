@@ -1,95 +1,67 @@
-const { createTrip } = require('../chatgptService');
+const { createTrip } = require('../service/chatgptService');
 const logger = require('../logger/logger');
+const path = require('path');
+const fs = require('fs');
 
-class ItineraryController {
+class TripController {
   static createNewTrip = async (req, res) => {
     try {
-      const { destino, dias, categorias } = req.query;
+      const { destination, days, categories } = req.query;
 
-      if (!destino || !dias || !categorias) {
-        return res.status(400).json({
-          message: 'Parâmetros destino, dias e categorias são obrigatórios.',
-        });
+      if (!destination || !days || !categories) {
+        throw new Error('Required parameters not provided');
       }
 
       logger.info(
-        `Creating trip: [Destination: ${destino}, days: ${dias}, category: ${categorias}].`
+        `Creating trip: [Destination: ${destination}, days: ${days}, categories: ${categories}].`
       );
 
-      const trip = await createTrip(destino, categorias, dias);
+      const trip = await createTrip(destination, days, categories);
 
-      res.send(generateHTML(destino, dias, categorias, trip));
+      if (!trip) {
+        throw new Error('Received empty trip');
+      }
+
+      return res.send(generateHTML(trip));
     } catch (error) {
-      logger.error(
-        `Error TripController.createNewTrip - Details: ${error.message}`
-      );
-      res.status(500).json({ message: 'Internal server error.' });
+      logger.error(`TripController.createNewTrip - ${error}.`);
+      return res
+        .status(400)
+        .sendFile(path.join(__dirname, '../../public/not-found.html'));
     }
   };
 }
 
-// Utility function to prevent XSS when displaying data on the page
-const escapeHTML = (str) =>
-  String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+const generateHTML = (trip) => {
+  if (!trip) {
+    throw new Error('Trip not informed');
+  }
 
-const generateHTML = (destino, dias, categorias, trip) => {
-  const safeDestino = escapeHTML(destino);
-  const safeDias = escapeHTML(dias);
-  const safeCategorias = escapeHTML(categorias);
-  const safeTrip = JSON.stringify(trip).replace(/</g, '\\u003c'); // Protection against XSS.
+  let template = loadTemplateFile();
 
-  return `
-    <!DOCTYPE html>
-    <html lang="pt">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Viagem para ${safeDestino} | Trip Planner</title>
-        <link rel="icon" type="image/x-icon" href="./includes/imgs/tab-icon.png">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            background-color: #dee9ff;
-            height: 100vh;
-            margin: 0;
-          }
-          .bg-blue-light {
-            background-color: #5891ff;
-          }
-        </style>
-    </head>
-    <body>
-        <div class="container mt-4">
-            <div class="card">
-                <div class="card-header bg-blue-light text-white">
-                    Sua Viagem Personalizada ✈️
-                </div>
-                <div class="card-body">
-                    <p class="card-text"><strong>Destino:</strong> ${safeDestino}</p>
-                    <p class="card-text"><strong>Número de dias:</strong> ${safeDias}</p>
-                    <p class="card-text"><strong>Categorias:</strong> ${safeCategorias}</p>
-                    <hr>
-                    <div id="outputText"></div>
-                </div>
-            </div>
-            <a href="/">
-              <button type="button" class="btn btn-primary mb-3 mt-3 rounded-pill">Voltar</button>
-            </a> 
-        </div>
-        <script>
-            document.getElementById("outputText").innerHTML = marked.parse(${safeTrip});
-        </script>
-    </body>
-    </html>
-  `;
+  if (!template) {
+    throw new Error('Template file not found');
+  }
+
+  return template
+    .replace(/_trip/, JSON.stringify(trip))
+    .replace('#{destination}', trip.destination);
 };
 
-module.exports = ItineraryController;
+const loadTemplateFile = () => {
+  const filePath = path.join(__dirname, '../templates/responseMap.html');
+
+  try {
+    if (!fs.existsSync(filePath)) {
+      logger.error(`File not found: ${filePath}.`);
+      return '';
+    }
+
+    return fs.readFileSync(filePath, 'utf8');
+  } catch (error) {
+    logger.error(`Error reading file ${filePath} - ${error.message}.`);
+    return '';
+  }
+};
+
+module.exports = TripController;
