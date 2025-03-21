@@ -1,13 +1,17 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const xss = require('xss-clean');
 
 const tripsRoutes = require('../routes/tripsRoute');
 
 const app = express();
 
+// Prevent cross site scripting.
+app.use(xss());
 // Middleware to process form data
 app.use(express.urlencoded({ extended: true }));
+// Serves static files from public folder.
 app.use('/', express.static(path.join(__dirname, '../../public')));
 
 app.use('/trips', tripsRoutes);
