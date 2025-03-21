@@ -14,12 +14,37 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <!-- Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Maps -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4BmMqqMAsw_dnX5bMgcZ2epfpOJtwH0Q&libraries=places,marker"></script>
   </head>
   <body>
+    <!--  navbar-light -->
+    <nav class="navbar navbar-expand-lg shadow" style="z-index: 99">
+      <a class="navbar-brand ms-2" href="/">
+        <span><i class="icon icon-arrow-left"></i></span>
+      </a>
+
+      <button
+        class="navbar-toggler me-2"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
     <div
       id="map"
-      style="width: 100vw; height: 100vh; background-color: blanchedalmond"
+      class="w-100"
+      style="height: 94vh; background-color: #dee9ff"
     ></div>
     <script>
       async function initMap(trip) {
@@ -31,6 +56,12 @@
           zoom: 14,
           center: position,
           mapId: 'DEMO_MAP_ID',
+          zoomControl: true,
+          gestureHandling: 'auto',
+          scrollwheel: true,
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: false,
         };
 
         const map = new google.maps.Map(
