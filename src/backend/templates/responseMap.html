@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Trip to #{ destination } | Trip Planner</title>
+    <title>Trip to #{destination} | Trip Planner</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
@@ -14,7 +14,7 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4BmMqqMAsw_dnX5bMgcZ2epfpOJtwH0Q&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4BmMqqMAsw_dnX5bMgcZ2epfpOJtwH0Q&libraries=places,marker"></script>
   </head>
   <body>
     <div
@@ -22,8 +22,11 @@
       style="width: 100vw; height: 100vh; background-color: blanchedalmond"
     ></div>
     <script>
-      async function initMap() {
-        const position = { lat: #{ latitude }, lng: #{ longitude } };
+      async function initMap(trip) {
+        const position = {
+          lat: trip.geolocation.lat,
+          lng: trip.geolocation.lng,
+        };
         const options = {
           zoom: 13,
           center: position,
@@ -35,34 +38,47 @@
           options
         );
 
-        google.maps.event.addListener(map, 'click', function (event) {
-          addMarker({ coord: event.latLng });
-        });
+        trip.days.forEach((day) => {
+          day.tourist_attractions.forEach((attraction) => {
+            const content = `
+              <h6>${attraction.name}</h6>
+              <p>${attraction.description}</p>
+              <p><strong>Opening hours:</strong> ${attraction.opening_hours}
+              <br>
+              <strong>Entrance:</strong> ${attraction.entrance_fee}</p>
+            `;
 
-        addMarker({
-          coord: { lat: #{ latitude }, lng: #{ longitude } },
-          content: '<h6>#{destination}</h6>',
+            addMarker({
+              title: attraction.name,
+              content,
+              coord: {
+                lat: attraction.geolocation.lat,
+                lng: attraction.geolocation.lng,
+              },
+            });
+          });
         });
 
         function addMarker(props) {
-          const marker = new google.maps.Marker({
+          const marker = new google.maps.marker.AdvancedMarkerElement({
             map: map,
             position: props.coord,
-            animation: google.maps.Animation.DROP,
+            title: props.title,
           });
 
           if (props.content) {
             const infoWindow = new google.maps.InfoWindow({
               content: props.content,
+              maxWidth: 270,
             });
 
-            marker.addListener('click', function () {
+            marker.addListener('gmp-click', function () {
               infoWindow.open(map, marker);
             });
           }
         }
       }
-      initMap();
+      initMap(_trip);
     </script>
   </body>
 </html>

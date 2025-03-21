@@ -23,7 +23,7 @@ class TripController {
         throw new Error('Error creating trip');
       }
 
-      res.send(generateHTML(trip));
+      return res.send(generateHTML(trip));
     } catch (error) {
       logger.error(`TripController.createNewTrip - ${error}.`);
       return res
@@ -45,9 +45,8 @@ const generateHTML = (trip) => {
   }
 
   return template
-    .replace(/#\{ destination \}/g, trip.destination)
-    .replace(/#\{ latitude \}/g, trip.geolocation.lat)
-    .replace(/#\{ longitude \}/g, trip.geolocation.lng);
+    .replace(/_trip/, JSON.stringify(trip))
+    .replace('#{destination}', trip.destination);
 };
 
 const loadTemplateFile = () => {

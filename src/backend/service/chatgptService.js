@@ -36,7 +36,7 @@ async function createTrip(destination, days, categories) {
       'Error calling OpenAI API: ',
       error.response?.data || error.message
     );
-    return 'Error creating travel plan. Please try again later.';
+    return '';
   }
 }
 
