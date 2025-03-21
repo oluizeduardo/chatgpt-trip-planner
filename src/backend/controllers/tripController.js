@@ -1,5 +1,6 @@
 const { createTrip } = require('../service/chatgptService');
 const logger = require('../logger/logger');
+const path = require('path');
 
 class TripController {
   static createNewTrip = async (req, res) => {
@@ -7,9 +8,9 @@ class TripController {
       const { destination, days, categories } = req.query;
 
       if (!destination || !days || !categories) {
-        return res.status(400).json({
-          message: 'Parameters destination, days and categories are required.',
-        });
+        return res
+          .status(400)
+          .sendFile(path.join(__dirname, '../../public/not-found.html'));
       }
 
       logger.info(
@@ -27,7 +28,7 @@ class TripController {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <meta name="description" content="Plan your trip smartly with Trip Planner. Use ChatGPT AI to create personalized itineraries, discover destinations, and optimize your travel time.">              
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">            
-            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4BmMqqMAsw_dnX5bMgcZ2epfpOJtwH0Q&libraries=places"></script>
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4BmMqqMAsw_dnX5bMgcZ2epfpOJtwH0Q&libraries=places,marker"></script>
         </head>
         <body>
             <div id="map" style="width: 100vw; height: 100vh; background-color: blanchedalmond;"></div>
@@ -53,10 +54,10 @@ class TripController {
                   });           
 
                   function addMarker(props){
-                    const marker = new google.maps.Marker({
+                    const marker = new google.maps.marker.AdvancedMarkerElement({
                       map: map,
                       position: props.coord,
-                      animation: google.maps.Animation.DROP,
+                      title: props.content || "", 
                     });
 
                     if(props.content){
@@ -64,8 +65,11 @@ class TripController {
                         content: props.content
                       });
 
-                      marker.addListener('click', function(){
-                        infoWindow.open(map, marker);
+                      marker.addListener('mouseover', () => {
+                        infoWindow.open({
+                            anchor: marker,
+                            map,
+                        });
                       });
                     }
                   } 
@@ -77,7 +81,9 @@ class TripController {
       `);
     } catch (error) {
       logger.error(`TripController.createNewTrip - ${error}.`);
-      res.status(500).json({ message: 'Internal server error.' });
+      return res
+        .status(400)
+        .sendFile(path.join(__dirname, '../../public/not-found.html'));
     }
   };
 }
