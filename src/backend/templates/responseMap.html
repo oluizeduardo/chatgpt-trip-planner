@@ -20,7 +20,7 @@
       rel="stylesheet"
     />
     <!-- Google Maps -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4BmMqqMAsw_dnX5bMgcZ2epfpOJtwH0Q&libraries=places,marker"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4BmMqqMAsw_dnX5bMgcZ2epfpOJtwH0Q&v=beta&libraries=marker"></script>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg shadow" style="z-index: 99">
@@ -52,9 +52,9 @@
           lng: trip.geolocation.lng,
         };
         const options = {
-          zoom: 14,
+          zoom: 13,
           center: position,
-          mapId: 'DEMO_MAP_ID',
+          mapId: 'f8102610a7ed9124',
           zoomControl: true,
           gestureHandling: 'auto',
           scrollwheel: true,
