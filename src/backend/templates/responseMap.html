@@ -35,10 +35,16 @@
     ></div>
     <script>
       async function initMap(trip) {
+        if (!trip || !trip.geolocation || !trip.days) {
+          console.error('Invalid trip data provided.');
+          return;
+        }
+
         const position = {
           lat: trip.geolocation.lat,
           lng: trip.geolocation.lng,
         };
+
         const options = {
           zoom: 13,
           center: position,
@@ -56,14 +62,32 @@
           options
         );
 
+        const infoWindow = new google.maps.InfoWindow();
+
+        function addMarker({ title, content, coord }) {
+          const marker = new google.maps.marker.AdvancedMarkerElement({
+            map,
+            title,
+            position: coord,
+          });
+
+          marker.addListener('gmp-click', function () {
+            infoWindow.setContent(content);
+            infoWindow.open(map, marker);
+          });
+        }
+
         trip.days.forEach((day) => {
-          day.tourist_attractions.forEach((attraction) => {
+          day.tourist_attractions?.forEach((attraction) => {
+            if (!attraction.geolocation) return; // Ensure geolocation exists
+
             const content = `
-              <h6>${attraction.name}</h6>
-              <p>${attraction.description}</p>
-              <p><strong>Opening hours:</strong> ${attraction.opening_hours}
-              <br>
-              <strong>Entrance:</strong> ${attraction.entrance_fee}</p>
+              <div>
+                <h6>${attraction.name}</h6>
+                <p>${attraction.description}</p>
+                <p><strong>Opening hours:</strong> ${attraction.opening_hours}<br>
+                <strong>Entrance:</strong> ${attraction.entrance_fee || 'Free'}</p>
+              </div>
             `;
 
             addMarker({
@@ -77,24 +101,8 @@
           });
         });
 
-        function addMarker(props) {
-          const marker = new google.maps.marker.AdvancedMarkerElement({
-            map: map,
-            position: props.coord,
-            title: props.title,
-          });
-
-          if (props.content) {
-            const infoWindow = new google.maps.InfoWindow({
-              content: props.content,
-              maxWidth: 270,
-            });
-
-            marker.addListener('gmp-click', function () {
-              infoWindow.open(map, marker);
-            });
-          }
-        }
+        // Close InfoWindow when clicking anywhere on the map
+        map.addListener('click', () => infoWindow.close());
       }
       initMap(_trip);
     </script>

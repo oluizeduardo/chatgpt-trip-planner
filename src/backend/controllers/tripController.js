@@ -34,7 +34,7 @@ class TripController {
 
 const generateHTML = (trip) => {
   if (!trip) {
-    throw new Error('Trip not informed');
+    throw new Error('Trip data is required to generate HTML');
   }
 
   let template = loadTemplateFile();

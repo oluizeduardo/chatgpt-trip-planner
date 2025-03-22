@@ -8,7 +8,7 @@ const createPrompt = (destination, days, categories) => `
       - Name of the place.
       - A brief description.
       - Estimated entrance fee (if applicable; otherwise, specify "Free").
-      - Opening hours.
+      - Opening hours (if it's always open, specify "Open 24 hours").
       - Estimated visit duration.
       - Geolocation (latitude, longitude).
   Respond with JSON only, formatted as follows:
