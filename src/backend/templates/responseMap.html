@@ -81,7 +81,7 @@
           day.tourist_attractions?.forEach(async (attraction) => {
             if (!attraction.geolocation) return; // Ensure geolocation exists
 
-            const photoUrl = await getPlacePhotoUrl(attraction.name, map);
+            const photoUrl = await getPhotoUrl(attraction.name, map);
 
             const content = `
               <div>
@@ -109,6 +109,11 @@
 
         // Close InfoWindow when clicking anywhere on the map
         map.addListener('click', () => infoWindow.close());
+      }
+      
+      async function getPhotoUrl(placeName, map) {
+        const photoUrl = await getPlacePhotoUrl(placeName, map);
+        return photoUrl || 'https://placehold.co/600x400?text=...';
       }
 
       async function getPlacePhotoUrl(placeName, map) {
