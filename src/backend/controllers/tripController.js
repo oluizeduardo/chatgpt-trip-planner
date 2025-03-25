@@ -45,7 +45,7 @@ const generateHTML = (trip) => {
 
   return template
     .replace(/_trip/, JSON.stringify(trip))
-    .replace('#{destination}', trip.destination);
+    .replace(/#{destination}/g, trip.destination || '');
 };
 
 const loadTemplateFile = () => {
