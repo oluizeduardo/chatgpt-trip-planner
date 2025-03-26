@@ -111,7 +111,9 @@
           day.tourist_attractions?.forEach(async (attraction) => {
             if (!attraction.geolocation) return; // Ensure geolocation exists
 
-            const photoUrl = await getPhotoUrl(attraction.name, map);
+            const placeName = attraction.name;
+            const destination = trip.destination;
+            const photoUrl = await getPhotoUrl(placeName, destination, map);
 
             const content = `
               <div>
@@ -141,19 +143,19 @@
         map.addListener('click', () => infoWindow.close());
       }
       
-      async function getPhotoUrl(placeName, map) {
-        const photoUrl = await getPlacePhotoUrl(placeName, map);
+      async function getPhotoUrl(placeName, destination, map) {
+        const photoUrl = await getPlacePhotoUrl(placeName, destination, map);
         return photoUrl || 'https://placehold.co/600x400?text=...';
       }
 
-      async function getPlacePhotoUrl(placeName, map) {
+      async function getPlacePhotoUrl(placeName, destination, map) {
         return new Promise((resolve, reject) => {
           const service = new google.maps.places.PlacesService(map);
 
           // Search Place ID by the local name.
           service.findPlaceFromQuery(
             {
-              query: placeName, 
+              query: placeName + ' ' + destination, 
               fields: ['place_id']
             },
             (results, status) => {
