@@ -23,13 +23,38 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4BmMqqMAsw_dnX5bMgcZ2epfpOJtwH0Q&v=beta&libraries=marker,places"></script>
   </head>
   <body>
+    <style>
+      .arrow-return {
+        color: #1668e3;
+        padding: 5px 10px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .arrow-return:hover {
+        color: #1668e3;
+        background-color: #dee9ff;
+      }
+      .destination {
+        font-size: 1.25rem;
+        max-width: 80vw;
+        word-wrap: break-word;
+        white-space: normal;
+        overflow-wrap: break-word;
+        text-align: left;
+      }
+      @media (max-width: 400px) {
+        .destination {
+          width: 100%;
+        }
+      }
+    </style>
     <nav class="navbar navbar-expand-lg shadow" style="z-index: 99">
       <div class="d-flex align-items-center">
-        <a class="navbar-brand ms-2" href="/">
+        <a class="navbar-brand ms-2 arrow-return" href="/">
           <span><i class="icon icon-arrow-left"></i></span>
         </a>
-        <div class="container-fluid">
-          <strong><a class="navbar-brand">#{destination}</a></strong>
+        <div class="destination">
+          <strong>#{destination}</strong>
         </div>
       </div>  
     </nav>
